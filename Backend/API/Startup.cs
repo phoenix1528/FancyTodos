@@ -1,4 +1,6 @@
+using Application.Todos.Queries;
 using Infrastructure;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -37,6 +39,8 @@ namespace API
                     .WithOrigins("http://localhost:3000");
                 });
             });
+
+            services.AddMediatR(typeof(GetTodos).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

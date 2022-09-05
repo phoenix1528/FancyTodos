@@ -1,31 +1,28 @@
-﻿using Domain;
-using Infrastructure;
+﻿using Application.Todos.Queries;
+using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     public class TodosController : BaseApiController
     {
-        private readonly DataContext _context;
-
-        public TodosController(DataContext context)
+        public TodosController(IMediator mediator) : base(mediator)
         {
-            _context = context;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Todo>>> GetTodos()
         {
-            return Ok(await _context.Todos.ToListAsync());
+            return Ok(await Mediator.Send(new GetTodos.Query()));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Todo>> GetTodo(Guid id)
         {
-            var todo = await _context.Todos.FindAsync(id);
+            var todo = await Mediator.Send(new GetTodo.Query(id));
 
-            return StatusCode(todo != null ? 200 : 404, todo);
+            return ReturnCorrectStatusCode(todo);
         }
     }
 }
