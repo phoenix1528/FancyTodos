@@ -1,10 +1,6 @@
 using API.Extensions;
-using Application.Mapping;
-using Application.Todos.Queries;
-using Infrastructure;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Application.Todos.Commands;
+using FluentValidation;
 
 namespace API
 {

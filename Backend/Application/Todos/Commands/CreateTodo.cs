@@ -12,7 +12,7 @@ namespace Application.Todos.Commands
         {
             public CreateTodoDto CreateTodoDto { get; private set; }
 
-            public Command(CreateTodoDto createTodoDto) 
+            public Command(CreateTodoDto createTodoDto)
             {
                 CreateTodoDto = createTodoDto;
             }
@@ -31,7 +31,7 @@ namespace Application.Todos.Commands
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var todo = _mapper.Map<Todo>(request.CreateTodoDto);
+                var todo = Todo.Create(_mapper.Map<Todo>(request.CreateTodoDto));
 
                 _context.Todos.Add(todo);
                 await _context.SaveChangesAsync();

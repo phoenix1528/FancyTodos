@@ -31,15 +31,17 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateTodoAsync(CreateTodoDto createTodoDto)
         {
             await Mediator.Send(new CreateTodo.Command(createTodoDto));
-            return Ok();
+            return StatusCode(201);
         }
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> EditTodoAsync(EditTodoDto editTodoDto)
         {
             await Mediator.Send(new EditTodo.Command(editTodoDto));
@@ -48,9 +50,9 @@ namespace API.Controllers
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteTodoAsync(Guid id)
         {
-
             await Mediator.Send(new DeleteTodo.Command(id));
 
             return NoContent();

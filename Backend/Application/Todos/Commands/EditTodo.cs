@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain;
 using Infrastructure;
 using MediatR;
 using Shared.Dtos.Todos;
@@ -32,7 +33,10 @@ namespace Application.Todos.Commands
             {
                 var todo = await _context.Todos.FindAsync(request.EditTodoDto.Id);
 
-                _mapper.Map(request.EditTodoDto, todo);
+                if(todo != null)
+                {
+                    todo.Update(_mapper.Map<Todo>(request.EditTodoDto));
+                }
 
                 await _context.SaveChangesAsync();
 
