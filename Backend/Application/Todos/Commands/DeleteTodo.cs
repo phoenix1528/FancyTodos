@@ -2,18 +2,23 @@
 using Infrastructure;
 using MediatR;
 using Shared.Dtos.Todos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Todos.Commands
 {
-    public class EditTodo
+    public class DeleteTodo
     {
         public class Command : IRequest
         {
-            public EditTodoDto EditTodoDto { get; private set; }
+            public Guid Id { get; private set; }
 
-            public Command(EditTodoDto editTodoDto)
+            public Command(Guid id)
             {
-                EditTodoDto = editTodoDto;
+                Id = id;
             }
         }
 
@@ -30,11 +35,13 @@ namespace Application.Todos.Commands
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var todo = await _context.Todos.FindAsync(request.EditTodoDto.Id);
+                var todo = await _context.Todos.FindAsync(request.Id);
 
-                _mapper.Map(request.EditTodoDto, todo);
-
-                await _context.SaveChangesAsync();
+                if(todo != null)
+                {
+                    _context.Remove(todo);
+                    await _context.SaveChangesAsync();
+                }
 
                 return Unit.Value;
             }

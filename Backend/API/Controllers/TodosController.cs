@@ -45,5 +45,15 @@ namespace API.Controllers
             await Mediator.Send(new EditTodo.Command(editTodoDto));
             return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteTodoAsync(Guid id)
+        {
+
+            await Mediator.Send(new DeleteTodo.Command(id));
+
+            return NoContent();
+        }
     }
 }
