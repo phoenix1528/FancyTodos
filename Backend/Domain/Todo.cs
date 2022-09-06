@@ -9,6 +9,7 @@
 
         public Todo(string title, DateTime date, string description, string category, string city, string venue)
         {
+            Id = Guid.NewGuid();
             Title = title;
             Date = date;
             Description = description;

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading;
 
 namespace API.Controllers
 {

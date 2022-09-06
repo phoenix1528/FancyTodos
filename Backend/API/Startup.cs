@@ -1,3 +1,4 @@
+using Application.Mapping;
 using Application.Todos.Queries;
 using Infrastructure;
 using MediatR;
@@ -41,6 +42,7 @@ namespace API
             });
 
             services.AddMediatR(typeof(GetTodos).Assembly);
+            services.AddAutoMapper(typeof(TodoProfile).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
