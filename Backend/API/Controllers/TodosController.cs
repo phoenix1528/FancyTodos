@@ -35,7 +35,13 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateTodoAsync(CreateTodoDto createTodoDto)
         {
-            await Mediator.Send(new CreateTodo.Command(createTodoDto));
+            var response = await Mediator.Send(new CreateTodo.Command(createTodoDto));
+
+            if (!response.IsSuccessful)
+            {
+                return BadRequest();
+            }
+
             return StatusCode(201);
         }
 
