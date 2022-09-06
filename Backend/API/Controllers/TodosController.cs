@@ -38,9 +38,9 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> EditTodoAsync(Guid id, EditTodoDto editTodoDto)
+        public async Task<IActionResult> EditTodoAsync(EditTodoDto editTodoDto)
         {
             await Mediator.Send(new EditTodo.Command(editTodoDto));
             return NoContent();
