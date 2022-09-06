@@ -31,10 +31,19 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateTodoAsync(CreateTodoDto createTodoDto)
         {
-            return Ok(await Mediator.Send(new CreateTodo.Command(createTodoDto)));
+            await Mediator.Send(new CreateTodo.Command(createTodoDto));
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> EditTodoAsync(Guid id, EditTodoDto editTodoDto)
+        {
+            await Mediator.Send(new EditTodo.Command(editTodoDto));
+            return NoContent();
         }
     }
 }

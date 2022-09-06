@@ -9,6 +9,7 @@ namespace Application.Mapping
         public TodoProfile()
         {
             CreateMap<CreateTodoDto, Todo>();
+            CreateMap<EditTodoDto, Todo>();
         }
     }
 }
