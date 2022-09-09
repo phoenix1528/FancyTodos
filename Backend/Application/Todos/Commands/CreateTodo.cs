@@ -37,7 +37,7 @@ namespace Application.Todos.Commands
                     var todo = Todo.Create(_mapper.Map<Todo>(request.CreateTodoDto));
 
                     _context.Todos.Add(todo);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
                 catch (ValidationException ex)
                 {

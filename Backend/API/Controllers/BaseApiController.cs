@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Todos.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -12,16 +13,6 @@ namespace API.Controllers
         public BaseApiController(IMediator mediator)
         {
             Mediator = mediator;
-        }
-
-        public ActionResult ReturnCorrectStatusCode<T>(T entity)
-        {
-            if (entity == null)
-            {
-                return NotFound(entity);
-            }
-
-            return Ok(entity);
         }
     }
 }

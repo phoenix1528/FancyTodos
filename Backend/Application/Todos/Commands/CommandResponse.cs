@@ -10,13 +10,20 @@ namespace Application.Todos.Commands
     public class CommandResponse
     {
         public IEnumerable<ValidationFailure> ValidationErrors { get; } = Enumerable.Empty<ValidationFailure>();
-        public bool IsSuccessful => !ValidationErrors.Any();
+        public bool ItemExists { get; } = true;
+
+        public bool IsSuccessful => !ValidationErrors.Any() && ItemExists;
 
         public CommandResponse() { }
 
         public CommandResponse(IEnumerable<ValidationFailure> validationErrors)
         {
             ValidationErrors = validationErrors;
+        }
+
+        public CommandResponse(bool itemExists)
+        {
+            ItemExists = itemExists;
         }
 
 

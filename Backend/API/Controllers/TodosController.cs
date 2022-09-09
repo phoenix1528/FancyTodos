@@ -17,7 +17,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(IEnumerable<Todo>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Todo>>> GetTodosAsync()
         {
-            return Ok(await Mediator.Send(new GetTodos.Query()));
+            return Ok(await Mediator.Send(new GetTodos.Query()).ConfigureAwait(false));
         }
 
         [HttpGet("{id}")]
@@ -25,9 +25,14 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Todo>> GetTodoAsync(Guid id)
         {
-            var todo = await Mediator.Send(new GetTodo.Query(id));
+            var todo = await Mediator.Send(new GetTodo.Query(id)).ConfigureAwait(false);
 
-            return ReturnCorrectStatusCode(todo);
+            if (todo == null)
+            {
+                return NotFound(todo);
+            }
+
+            return Ok(todo);
         }
 
         [HttpPost]
@@ -35,7 +40,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateTodoAsync(CreateTodoDto createTodoDto)
         {
-            var response = await Mediator.Send(new CreateTodo.Command(createTodoDto));
+            var response = await Mediator.Send(new CreateTodo.Command(createTodoDto)).ConfigureAwait(false);
 
             if (!response.IsSuccessful)
             {
@@ -50,11 +55,16 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> EditTodoAsync(EditTodoDto editTodoDto)
         {
-            var response = await Mediator.Send(new EditTodo.Command(editTodoDto));
+            var response = await Mediator.Send(new EditTodo.Command(editTodoDto)).ConfigureAwait(false);
 
             if (!response.IsSuccessful)
             {
                 return BadRequest(response.ValidationErrors);
+            }
+
+            if (!response.ItemExists)
+            {
+                return NotFound(editTodoDto.Id);
             }
 
             return NoContent();
@@ -65,7 +75,12 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteTodoAsync(Guid id)
         {
-            await Mediator.Send(new DeleteTodo.Command(id));
+            var response = await Mediator.Send(new DeleteTodo.Command(id)).ConfigureAwait(false);
+
+            if (!response.ItemExists)
+            {
+                return NotFound(id);
+            }
 
             return NoContent();
         }

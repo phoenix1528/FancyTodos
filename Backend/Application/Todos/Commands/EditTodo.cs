@@ -32,16 +32,18 @@ namespace Application.Todos.Commands
 
             public async Task<CommandResponse> Handle(Command request, CancellationToken cancellationToken)
             {
-                var todo = await _context.Todos.FindAsync(request.EditTodoDto.Id);
+                var todo = await _context.Todos.FindAsync(request.EditTodoDto.Id).ConfigureAwait(false);
+
+                if (todo == null)
+                {
+                    return new CommandResponse(false);
+                }
 
                 try
                 {
-                    if (todo != null)
-                    {
-                        todo.Update(_mapper.Map<Todo>(request.EditTodoDto));
-                    }
+                    todo.Update(_mapper.Map<Todo>(request.EditTodoDto));
 
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
                 }
                 catch (ValidationException ex)
                 {
