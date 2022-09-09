@@ -39,7 +39,7 @@ namespace API.Controllers
 
             if (!response.IsSuccessful)
             {
-                return BadRequest();
+                return BadRequest(response.ValidationErrors);
             }
 
             return StatusCode(201);
@@ -50,7 +50,13 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> EditTodoAsync(EditTodoDto editTodoDto)
         {
-            await Mediator.Send(new EditTodo.Command(editTodoDto));
+            var response = await Mediator.Send(new EditTodo.Command(editTodoDto));
+
+            if (!response.IsSuccessful)
+            {
+                return BadRequest(response.ValidationErrors);
+            }
+
             return NoContent();
         }
 

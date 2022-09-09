@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain;
+using FluentValidation;
 using Infrastructure;
 using MediatR;
 using Shared.Dtos.Todos;
@@ -8,7 +9,7 @@ namespace Application.Todos.Commands
 {
     public class EditTodo
     {
-        public class Command : IRequest
+        public class Command : IRequest<CommandResponse>
         {
             public EditTodoDto EditTodoDto { get; private set; }
 
@@ -18,7 +19,7 @@ namespace Application.Todos.Commands
             }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, CommandResponse>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -29,18 +30,25 @@ namespace Application.Todos.Commands
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<CommandResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var todo = await _context.Todos.FindAsync(request.EditTodoDto.Id);
 
-                if(todo != null)
+                try
                 {
-                    todo.Update(_mapper.Map<Todo>(request.EditTodoDto));
+                    if (todo != null)
+                    {
+                        todo.Update(_mapper.Map<Todo>(request.EditTodoDto));
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (ValidationException ex)
+                {
+                    return new CommandResponse(ex.Errors);
                 }
 
-                await _context.SaveChangesAsync();
-
-                return Unit.Value;
+                return new CommandResponse();
             }
         }
     }
