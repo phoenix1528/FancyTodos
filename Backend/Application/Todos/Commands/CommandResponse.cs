@@ -7,25 +7,33 @@ using System.Threading.Tasks;
 
 namespace Application.Todos.Commands
 {
-    public class CommandResponse
+    public interface ICommandResponse
     {
-        public IEnumerable<ValidationFailure> ValidationErrors { get; } = Enumerable.Empty<ValidationFailure>();
-        public bool ItemExists { get; } = true;
+        public IEnumerable<ValidationFailure> ValidationErrors { get; }
+        public bool ItemExists { get;  }
 
-        public bool IsSuccessful => !ValidationErrors.Any() && ItemExists;
+        public bool Success => !ValidationErrors.Any() && ItemExists;
+    }
 
-        public CommandResponse() { }
+    public class SuccessCommandResponse : ICommandResponse
+    {
+        public IEnumerable<ValidationFailure> ValidationErrors { get; private set; } = Enumerable.Empty<ValidationFailure>();
+        public bool ItemExists { get; private set; } = true;
+    }
 
-        public CommandResponse(IEnumerable<ValidationFailure> validationErrors)
-        {
-            ValidationErrors = validationErrors;
-        }
+    public class FailureCommandResponse : ICommandResponse
+    {
+        public IEnumerable<ValidationFailure> ValidationErrors { get; private set; } = Enumerable.Empty<ValidationFailure>();
+        public bool ItemExists { get; private set; } = true;
 
-        public CommandResponse(bool itemExists)
+        public FailureCommandResponse(bool itemExists)
         {
             ItemExists = itemExists;
         }
 
-
+        public FailureCommandResponse(IEnumerable<ValidationFailure> validationErrors)
+        {
+            ValidationErrors = validationErrors;
+        }
     }
 }

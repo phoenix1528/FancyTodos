@@ -42,7 +42,7 @@ namespace API.Controllers
         {
             var response = await Mediator.Send(new CreateTodo.Command(createTodoDto)).ConfigureAwait(false);
 
-            if (!response.IsSuccessful)
+            if (!response.Success)
             {
                 return BadRequest(response.ValidationErrors);
             }
@@ -57,7 +57,7 @@ namespace API.Controllers
         {
             var response = await Mediator.Send(new EditTodo.Command(editTodoDto)).ConfigureAwait(false);
 
-            if (!response.IsSuccessful)
+            if (!response.Success)
             {
                 return BadRequest(response.ValidationErrors);
             }
