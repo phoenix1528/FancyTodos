@@ -11,12 +11,12 @@ namespace Application.Todos.Commands
     {
         public class Command : IRequest<IEditCommandResponse>
         {
-            public EditTodoDto EditTodoDto { get; private set; }
-
             public Command(EditTodoDto editTodoDto)
             {
                 EditTodoDto = editTodoDto;
             }
+
+            public EditTodoDto EditTodoDto { get; private set; }
         }
 
         public class Handler : IRequestHandler<Command, IEditCommandResponse>

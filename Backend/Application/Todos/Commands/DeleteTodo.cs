@@ -14,12 +14,12 @@ namespace Application.Todos.Commands
     {
         public class Command : IRequest<IDeleteCommandResponse>
         {
-            public Guid Id { get; private set; }
-
             public Command(Guid id)
             {
                 Id = id;
             }
+
+            public Guid Id { get; private set; }
         }
 
         public class Handler : IRequestHandler<Command, IDeleteCommandResponse>

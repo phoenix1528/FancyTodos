@@ -9,7 +9,7 @@ namespace API.ResponseHandlers
     {
         public ActionResult Handle(ICreateCommandResponse commandResponse)
         {
-            if (!commandResponse.Success)
+            if (!commandResponse.ValidationSuccess)
             {
                 return new BadRequestObjectResult(commandResponse.ValidationErrors);
             }
@@ -24,7 +24,7 @@ namespace API.ResponseHandlers
                 return new NotFoundObjectResult(commandResponse.ItemId);
             }
 
-            if (!commandResponse.Success)
+            if (!commandResponse.ValidationSuccess)
             {
                 return new BadRequestObjectResult(commandResponse.ValidationErrors);
             }

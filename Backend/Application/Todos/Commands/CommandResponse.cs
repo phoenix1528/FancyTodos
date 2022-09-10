@@ -13,7 +13,7 @@ namespace Application.Todos.Commands
         public bool ItemExists { get; }
         public Guid ItemId { get; }
 
-        public bool Success => !ValidationErrors.Any() && ItemExists;
+        public bool ValidationSuccess => !ValidationErrors.Any();
     }
     public interface ICreateCommandResponse : ICommandResponse { }
 
@@ -30,10 +30,6 @@ namespace Application.Todos.Commands
 
     public class FailureCommandResponse : ICreateCommandResponse, IEditCommandResponse, IDeleteCommandResponse
     {
-        public IEnumerable<ValidationFailure> ValidationErrors { get; private set; } = Enumerable.Empty<ValidationFailure>();
-        public bool ItemExists { get; private set; } = true;
-        public Guid ItemId { get; }
-
         public FailureCommandResponse(bool itemExists, Guid itemId)
         {
             ItemExists = itemExists;
@@ -44,5 +40,9 @@ namespace Application.Todos.Commands
         {
             ValidationErrors = validationErrors;
         }
+
+        public IEnumerable<ValidationFailure> ValidationErrors { get; private set; } = Enumerable.Empty<ValidationFailure>();
+        public bool ItemExists { get; private set; } = true;
+        public Guid ItemId { get; }
     }
 }

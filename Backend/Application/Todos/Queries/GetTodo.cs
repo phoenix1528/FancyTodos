@@ -9,13 +9,13 @@ namespace Application.Todos.Queries
     {
         public class Query : IRequest<Todo> 
         {
-            public Guid Id { get; private set; }
-
             public Query(
                 Guid id)
             {
                 Id = id;
             }
+
+            public Guid Id { get; private set; }
         }
 
         public class Handler : IRequestHandler<Query, Todo?>
