@@ -9,7 +9,7 @@ namespace Application.Todos.Commands
 {
     public class EditTodo
     {
-        public class Command : IRequest<ICommandResponse>
+        public class Command : IRequest<IEditCommandResponse>
         {
             public EditTodoDto EditTodoDto { get; private set; }
 
@@ -19,7 +19,7 @@ namespace Application.Todos.Commands
             }
         }
 
-        public class Handler : IRequestHandler<Command, ICommandResponse>
+        public class Handler : IRequestHandler<Command, IEditCommandResponse>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -30,13 +30,13 @@ namespace Application.Todos.Commands
                 _mapper = mapper;
             }
 
-            public async Task<ICommandResponse> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<IEditCommandResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var todo = await _context.Todos.FindAsync(request.EditTodoDto.Id).ConfigureAwait(false);
 
                 if (todo == null)
                 {
-                    return new FailureCommandResponse(false);
+                    return new FailureCommandResponse(false, request.EditTodoDto.Id);
                 }
 
                 try

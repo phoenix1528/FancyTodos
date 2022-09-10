@@ -12,7 +12,7 @@ namespace Application.Todos.Commands
 {
     public class DeleteTodo
     {
-        public class Command : IRequest<ICommandResponse>
+        public class Command : IRequest<IDeleteCommandResponse>
         {
             public Guid Id { get; private set; }
 
@@ -22,7 +22,7 @@ namespace Application.Todos.Commands
             }
         }
 
-        public class Handler : IRequestHandler<Command, ICommandResponse>
+        public class Handler : IRequestHandler<Command, IDeleteCommandResponse>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -33,13 +33,13 @@ namespace Application.Todos.Commands
                 _mapper = mapper;
             }
 
-            public async Task<ICommandResponse> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<IDeleteCommandResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 var todo = await _context.Todos.FindAsync(request.Id).ConfigureAwait(false);
 
                 if (todo == null)
                 {
-                    return new FailureCommandResponse(false);
+                    return new FailureCommandResponse(false, request.Id);
                 }
 
                 _context.Remove(todo);

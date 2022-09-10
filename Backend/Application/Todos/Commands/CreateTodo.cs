@@ -9,7 +9,7 @@ namespace Application.Todos.Commands
 {
     public class CreateTodo
     {
-        public class Command : IRequest<ICommandResponse>
+        public class Command : IRequest<ICreateCommandResponse>
         {
             public CreateTodoDto CreateTodoDto { get; private set; }
 
@@ -19,7 +19,7 @@ namespace Application.Todos.Commands
             }
         }
 
-        public class Handler : IRequestHandler<Command, ICommandResponse>
+        public class Handler : IRequestHandler<Command, ICreateCommandResponse>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -30,7 +30,7 @@ namespace Application.Todos.Commands
                 _mapper = mapper;
             }
 
-            public async Task<ICommandResponse> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<ICreateCommandResponse> Handle(Command request, CancellationToken cancellationToken)
             {
                 try
                 {

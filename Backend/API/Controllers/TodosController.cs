@@ -4,12 +4,13 @@ using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Dtos.Todos;
+using API.ResponseHandlers;
 
 namespace API.Controllers
 {
     public class TodosController : BaseApiController
     {
-        public TodosController(IMediator mediator) : base(mediator)
+        public TodosController(IMediator mediator, ICommandResponseHandler handler) : base(mediator, handler)
         {
         }
 
@@ -42,12 +43,7 @@ namespace API.Controllers
         {
             var response = await Mediator.Send(new CreateTodo.Command(createTodoDto)).ConfigureAwait(false);
 
-            if (!response.Success)
-            {
-                return BadRequest(response.ValidationErrors);
-            }
-
-            return StatusCode(201);
+            return CommandResponseHandler.Handle(response);
         }
 
         [HttpPut]
@@ -57,17 +53,7 @@ namespace API.Controllers
         {
             var response = await Mediator.Send(new EditTodo.Command(editTodoDto)).ConfigureAwait(false);
 
-            if (!response.Success)
-            {
-                return BadRequest(response.ValidationErrors);
-            }
-
-            if (!response.ItemExists)
-            {
-                return NotFound(editTodoDto.Id);
-            }
-
-            return NoContent();
+            return CommandResponseHandler.Handle(response);
         }
 
         [HttpDelete("{id}")]
@@ -77,12 +63,7 @@ namespace API.Controllers
         {
             var response = await Mediator.Send(new DeleteTodo.Command(id)).ConfigureAwait(false);
 
-            if (!response.ItemExists)
-            {
-                return NotFound(id);
-            }
-
-            return NoContent();
+            return CommandResponseHandler.Handle(response);
         }
     }
 }

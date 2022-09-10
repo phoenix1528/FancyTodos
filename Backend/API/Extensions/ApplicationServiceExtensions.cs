@@ -1,4 +1,5 @@
-﻿using Application.Mapping;
+﻿using API.ResponseHandlers;
+using Application.Mapping;
 using Application.Todos.Queries;
 using Infrastructure;
 using MediatR;
@@ -33,6 +34,7 @@ namespace API.Extensions
 
             services.AddMediatR(typeof(GetTodos).Assembly);
             services.AddAutoMapper(typeof(TodoProfile).Assembly);
+            services.AddScoped<ICommandResponseHandler, CommandResponseHandler>();
 
             return services;
         }
