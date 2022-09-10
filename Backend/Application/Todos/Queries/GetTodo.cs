@@ -7,7 +7,7 @@ namespace Application.Todos.Queries
 {
     public class GetTodo
     {
-        public class Query : IRequest<Todo> 
+        public class Query : IRequest<Todo?> 
         {
             public Query(
                 Guid id)

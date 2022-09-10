@@ -1,5 +1,4 @@
 ﻿using API.CustomExceptionResponses;
-using System.Net;
 
 namespace API.Middlewares
 {

@@ -12,9 +12,9 @@ namespace Application.Todos.Queries
 {
     public class GetTodos
     {
-        public class Query : IRequest<List<Todo>> { }
+        public class Query : IRequest<IEnumerable<Todo>> { }
 
-        public class Handler : IRequestHandler<Query, List<Todo>>
+        public class Handler : IRequestHandler<Query, IEnumerable<Todo>>
         {
             private readonly DataContext _context;
 
@@ -23,7 +23,7 @@ namespace Application.Todos.Queries
                 _context = context;
             }
 
-            public async Task<List<Todo>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<Todo>> Handle(Query request, CancellationToken cancellationToken)
             {
                 return await _context.Todos.ToListAsync(cancellationToken).ConfigureAwait(false);
             }

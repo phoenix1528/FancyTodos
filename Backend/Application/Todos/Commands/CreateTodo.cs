@@ -32,11 +32,10 @@ namespace Application.Todos.Commands
 
             public async Task<ICreateCommandResponse> Handle(Command request, CancellationToken cancellationToken)
             {
-                var todo = Todo.Create(_mapper.Map<Todo>(request.CreateTodoDto));
-                
                 try
                 {
-                    
+
+                    var todo = Todo.Create(_mapper.Map<Todo>(request.CreateTodoDto));
 
                     _context.Todos.Add(todo);
                     await _context.SaveChangesAsync().ConfigureAwait(false);
@@ -45,10 +44,8 @@ namespace Application.Todos.Commands
                 {
                     return new FailureCommandResponse(ex.Errors);
                 }
-                throw new Exception($"database entry could not be created for {todo.Id}");
 
-
-                //return new SuccessCommandResponse();
+                return new SuccessCommandResponse();
             }
         }
     }
