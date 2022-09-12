@@ -1,9 +1,15 @@
-﻿using Domain;
+﻿using Application.Todos.Commands;
+using Domain;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
+using Shared.Dtos.Todos;
 
 namespace Tests.Todos
 {
     public static class TodosDataHelper
     {
+        public static Guid GUID = Guid.NewGuid();
+
         public static IEnumerable<Todo> GenerateTodos()
         {
             var todos = new List<Todo>
@@ -113,8 +119,110 @@ namespace Tests.Todos
                 "drinks",
                 "London",
                 "Pub",
-                Guid.NewGuid()
+                GUID
             );
+        }
+
+        public static CreateTodoDto GenerateCreateTodoDto()
+        {
+            return new CreateTodoDto
+            (
+                "Past Todo 1",
+                DateTime.Now.AddMonths(-2),
+                "Todo 2 months ago",
+                "drinks",
+                "London",
+                "Pub"
+            );
+        }
+
+        public static CreateTodoDto GenerateInvalidCreateTodoDto()
+        {
+            return new CreateTodoDto
+            (
+                "",
+                DateTime.Now.AddMonths(-2),
+                "",
+                "",
+                "",
+                ""
+            );
+        }
+
+        public static EditTodoDto GenerateEditTodoDto()
+        {
+            return new EditTodoDto
+            (
+                GUID,
+                "Past Todo 1",
+                DateTime.Now.AddMonths(-2),
+                "Todo 2 months ago",
+                "drinks",
+                "London",
+                "Pub"
+
+            );
+        }
+
+        public static EditTodoDto GenerateInvalidEditTodoDto()
+        {
+            return new EditTodoDto
+            (
+                GUID,
+                "",
+                DateTime.Now.AddMonths(-2),
+                "",
+                "",
+                "",
+                ""
+            );
+        }
+
+        public static FailureCommandResponse GenerateFailureCommandResponseWithUnspecifiedValidationErrors()
+        {
+            return new FailureCommandResponse
+            (
+                GenerateUnspecifiedValidationErrors()
+            );
+        }
+
+        public static FailureCommandResponse GenerateFailureCommandResponseWhereItemNotExists()
+        {
+            return new FailureCommandResponse
+            (
+                false,
+                GUID
+            );
+        }
+
+        public static SuccessCommandResponse GenerateSuccessCommandResponse()
+        {
+            return new SuccessCommandResponse();
+        }
+
+        public static IEnumerable<ValidationFailure> GenerateUnspecifiedValidationErrors()
+        {
+            return new List<ValidationFailure>
+            {
+                new ValidationFailure()
+                {
+                    
+                },
+                new ValidationFailure()
+                {
+
+                }
+            };
+        }
+
+        public static BadRequestObjectResult GenerateBadRequestObjectResult()
+        {
+            return new BadRequestObjectResult(GenerateUnspecifiedValidationErrors());
+        }
+
+        public static StatusCodeResult GenerateStatusCodeResult(int statusCode)
+        {
+            return new StatusCodeResult(statusCode);
         }
     }
 }
