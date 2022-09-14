@@ -34,7 +34,7 @@ namespace API.Extensions
 
             services.AddMediatR(typeof(GetTodos).Assembly);
             services.AddAutoMapper(typeof(TodoProfile).Assembly);
-            services.AddScoped<ICommandResponseHandler, CommandResponseHandler>();
+            services.AddTransient<ICommandResponseHandler, CommandResponseHandler>();
 
             return services;
         }
