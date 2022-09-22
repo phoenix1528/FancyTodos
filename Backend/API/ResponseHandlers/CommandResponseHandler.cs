@@ -14,7 +14,7 @@ namespace API.ResponseHandlers
                 return new BadRequestObjectResult(commandResponse.ValidationErrors);
             }
 
-            return new StatusCodeResult(201);
+            return new CreatedResult("api/todos", commandResponse.ItemId);
         }
 
         public ActionResult Handle(IEditCommandResponse commandResponse)

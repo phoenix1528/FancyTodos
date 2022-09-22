@@ -8,16 +8,15 @@ using Domain;
 using Application.Todos.Commands;
 using FluentValidation.Results;
 using Application.Todos.Queries;
-using Shared.Dtos.Todos;
 
 namespace Tests.Todos.Api
 {
-    public class TodosControllerTests : IClassFixture<TodosControllerTestsFixture>
+    public class TodosControllerTests : IClassFixture<ApiTestsFixture>
     {
         private readonly Mock<IMediator> _mediatorMock;
-        private readonly TodosControllerTestsFixture _fixture;
+        private readonly ApiTestsFixture _fixture;
 
-        public TodosControllerTests(TodosControllerTestsFixture fixture)
+        public TodosControllerTests(ApiTestsFixture fixture)
         {
 
             _mediatorMock = new Mock<IMediator>();
@@ -103,15 +102,16 @@ namespace Tests.Todos.Api
         public async Task CreateTodo_WhenSuccessResponse_Returns201StatusCode()
         {
             _mediatorMock.Setup(x => x.Send(It.IsAny<CreateTodo.Command>(), default))
-                .ReturnsAsync(_fixture.SuccessCommandResponse);
+                .ReturnsAsync(_fixture.SuccessCommandResponseWithId);
 
             var controller = new TodosController(_mediatorMock.Object, _fixture.CommandResponseHandler);
 
             var result = await controller.CreateTodoAsync(_fixture.CreateTodoDto);
-            result.Should().BeOfType<StatusCodeResult>();
+            result.Should().BeOfType<CreatedResult>();
 
-            var statusCodeResult = (StatusCodeResult)result;
-            statusCodeResult.StatusCode.Should().Be(201);
+            var createdResult = (CreatedResult)result;
+            createdResult.StatusCode.Should().Be(201);
+            createdResult.Value.Should().Be(_fixture.TodoId);
         }
 
         [Fact]

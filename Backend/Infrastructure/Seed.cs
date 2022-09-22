@@ -5,7 +5,7 @@ namespace Infrastructure
 {
     public class Seed
     {
-        public static async Task SeedData(DataContext context)
+        public static void SeedDatabaseWithTenTodos(DataContext context)
         {
             if (context.Todos.Any()) return;
 
@@ -103,8 +103,8 @@ namespace Infrastructure
                 )
             };
 
-            await context.Todos.AddRangeAsync(todos);
-            await context.SaveChangesAsync();
+            context.Todos.AddRange(todos);
+            context.SaveChanges();
         }
     }
 }

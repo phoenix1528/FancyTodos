@@ -113,12 +113,12 @@ namespace Tests.Todos
         {
             return new Todo
             (
-                "Past Todo 1",
-                DateTime.Now.AddMonths(-2),
-                "Todo 2 months ago",
-                "drinks",
-                "London",
-                "Pub",
+                "Single Todo 1",
+                DateTime.Now.AddMonths(-1),
+                "Todo 1 months ago",
+                "drinks1",
+                "London1",
+                "Pub1",
                 GUID
             );
         }
@@ -154,7 +154,7 @@ namespace Tests.Todos
             return new EditTodoDto
             (
                 GUID,
-                "Past Todo 1",
+                "Edit Todo",
                 DateTime.Now.AddMonths(-2),
                 "Todo 2 months ago",
                 "drinks",
@@ -198,6 +198,11 @@ namespace Tests.Todos
         public static SuccessCommandResponse GenerateSuccessCommandResponse()
         {
             return new SuccessCommandResponse();
+        }
+
+        public static SuccessCommandResponse GenerateSuccessCommandResponseWithId()
+        {
+            return new SuccessCommandResponse(GUID);
         }
 
         public static IEnumerable<ValidationFailure> GenerateUnspecifiedValidationErrors()

@@ -10,7 +10,8 @@ namespace API
             // prod-env
             CreateHostBuilder(args).Build().Run();
 
-            // ONLY for dev-env
+            //TODO: only seed on dev env 
+            //ONLY for dev-env
             //var host = CreateHostBuilder(args).Build();
 
             //using var scope = host.Services.CreateScope();
@@ -21,7 +22,7 @@ namespace API
             //{
             //    var context = services.GetRequiredService<DataContext>();
             //    //await context.Database.MigrateAsync();
-            //    await Seed.SeedData(context);
+            //    Seed.SeedDatabaseWithTenTodos(context);
             //}
             //catch (Exception ex)
             //{

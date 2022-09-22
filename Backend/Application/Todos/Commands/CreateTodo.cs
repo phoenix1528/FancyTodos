@@ -34,18 +34,17 @@ namespace Application.Todos.Commands
             {
                 try
                 {
-
                     var todo = Todo.Create(_mapper.Map<Todo>(request.CreateTodoDto));
 
                     _context.Todos.Add(todo);
                     await _context.SaveChangesAsync().ConfigureAwait(false);
+
+                    return new SuccessCommandResponse(todo.Id);
                 }
                 catch (ValidationException ex)
                 {
                     return new FailureCommandResponse(ex.Errors);
                 }
-
-                return new SuccessCommandResponse();
             }
         }
     }

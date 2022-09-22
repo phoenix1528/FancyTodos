@@ -23,6 +23,13 @@ namespace Application.Todos.Commands
 
     public class SuccessCommandResponse : ICreateCommandResponse, IEditCommandResponse, IDeleteCommandResponse
     {
+        public SuccessCommandResponse() { }
+
+        public SuccessCommandResponse(Guid id)
+        {
+            ItemId = id;
+        }
+
         public IEnumerable<ValidationFailure> ValidationErrors { get; private set; } = Enumerable.Empty<ValidationFailure>();
         public bool ItemExists { get; private set; } = true;
         public Guid ItemId { get; }
