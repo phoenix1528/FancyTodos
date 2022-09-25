@@ -1,10 +1,7 @@
-﻿using Application.Mapping;
-using Application.Todos.Commands;
-using AutoMapper;
+﻿using Application.Todos.Commands;
 using FluentAssertions;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Tests.Todos.Api;
 
 namespace Tests.Todos.Application
 {
@@ -22,8 +19,6 @@ namespace Tests.Todos.Application
 
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
-
-            context.SaveChanges();
         }
 
         [Fact]
@@ -44,6 +39,26 @@ namespace Tests.Todos.Application
             createdTodo.Should().NotBeNull();
 
             commandResponse.ItemId.Should().Be(createdTodo!.Id);
+        }
+
+        [Fact]
+        [Trait("Category", "Unit")]
+        public async Task CreateTodo_ValidationFailure_ReturnsFailureCommandResponseAndTodoDoesNotExistInDatabase()
+        {
+            using var context = new DataContext(_dbContextOptions);
+
+            var createTodoDto = TodosDataHelper.GenerateInvalidCreateTodoDto();
+
+            var command = new CreateTodo.Command(createTodoDto);
+            var handler = new CreateTodo.Handler(context, _fixture.Mapper);
+
+            var commandResponse = await handler.Handle(command, default);
+
+            commandResponse.Should().BeOfType<FailureCommandResponse>();
+
+            var createdTodo = await context.Todos.FindAsync(commandResponse.ItemId);
+
+            createdTodo.Should().BeNull();
         }
 
         [Fact]
@@ -72,6 +87,26 @@ namespace Tests.Todos.Application
             editedTodo!.Category.Should().Be(editTodoDto.Category);
             editedTodo!.Date.Should().Be(editTodoDto.Date);
             editedTodo!.Description.Should().Be(editTodoDto.Description);
+        }
+
+        [Fact]
+        [Trait("Category", "Unit")]
+        public async Task DeleteTodo_Success_TodoWasDeletedInDatabase()
+        {
+            using var context = new DataContext(_dbContextOptions);
+
+            var singleTodo = TodosDataHelper.GenerateSingleTodo();
+            await context.Todos.AddAsync(singleTodo);
+            await context.SaveChangesAsync();
+
+            var command = new DeleteTodo.Command(singleTodo.Id);
+            var handler = new DeleteTodo.Handler(context, _fixture.Mapper);
+
+            var commandResponse = await handler.Handle(command, default);
+
+            var editedTodo = await context.Todos.FindAsync(singleTodo.Id);
+
+            editedTodo.Should().BeNull();
         }
     }
 }

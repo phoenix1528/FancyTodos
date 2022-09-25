@@ -1,5 +1,4 @@
-﻿using API.ResponseHandlers;
-using Moq;
+﻿using Moq;
 using MediatR;
 using API.Controllers;
 using FluentAssertions;
